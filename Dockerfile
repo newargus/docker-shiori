@@ -8,16 +8,21 @@ RUN go build -ldflags '-s -w'
 
 # server image
 
-FROM ghcr.io/ghcri/alpine:3.15
-ENV SHIORI_DIR /srv/shiori/
-RUN mkdir -p /usr/bin/shiori
-COPY --from=builder /src/shiori /usr/bin/shiori
-RUN addgroup -g 1000 shiori \
- && adduser -D -h /shiori -g '' -G shiori -u 1000 shiori
-USER shiori
-WORKDIR /srv/shiori
-EXPOSE 8080
+FROM ghcr.io/linuxserver/baseimage-alpine:3.14
+ARG TAG_VERSION
+ENV GOPATH /go
+ENV SHIORI_DIR /data
+# hadolint ignore=DL3048
+LABEL build_version="Version:- ${TAG_VERSION}"
+LABEL maintainer="newargus"
+COPY --from=builder --chown=abc:abc /src/shiori /go/bin
+COPY root/ /
+RUN \
+  mkdir /data && \
+  chown -R abc:abc \
+    /data \
+    /go
+WORKDIR /data
+EXPOSE 8080/tcp
 VOLUME \
-    /srv/shiori
-ENTRYPOINT ["/usr/bin/shiori/shiori"]
-CMD ["serve"]
+  /data
