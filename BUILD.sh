@@ -2,8 +2,8 @@ VERSION=$(curl -s -XGET https://api.github.com/repos/go-shiori/shiori/tags | gre
 
 docker buildx build --platform linux/amd64,linux/arm64 \
 -f Dockerfile \
--t stefangenov/shiori:latest \
--t stefangenov/shiori:"${VERSION}" \
+-t newargus/shiori:latest \
+-t newargus/shiori:"${VERSION}" \
 --build-arg TAG_VERSION="${VERSION}" \
 --cpu-quota="400000" \
 --memory=16g \
