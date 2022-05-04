@@ -14,9 +14,8 @@ COPY --from=builder /src/shiori /usr/bin/shiori
 RUN addgroup -g 1000 shiori \
  && adduser -D -h /shiori -g '' -G shiori -u 1000 shiori
 USER shiori
-RUN mkdir -p /home/shiori
-WORKDIR /home/shiori
+WORKDIR /srv/shiori
 EXPOSE 8080
-ENV SHIORI_DIR /home/shiori/
+ENV SHIORI_DIR /srv/shiori/
 ENTRYPOINT ["/usr/bin/shiori/shiori"]
 CMD ["serve"]
