@@ -9,12 +9,14 @@ RUN go build -ldflags '-s -w'
 # server image
 
 FROM ghcr.io/ghcri/alpine:3.15
-COPY --from=builder /src/shiori /usr/bin/
+RUN mkdir -p /usr/bin/shiori
+COPY --from=builder /src/shiori /usr/bin/shiori
 RUN addgroup -g 1000 shiori \
  && adduser -D -h /shiori -g '' -G shiori -u 1000 shiori
 USER shiori
-WORKDIR /shiori
+RUN mkdir -p /home/shiori
+WORKDIR /home/shiori
 EXPOSE 8080
-ENV SHIORI_DIR /shiori/
-ENTRYPOINT ["/usr/bin/shiori"]
+ENV SHIORI_DIR /home/shiori/
+ENTRYPOINT ["/usr/bin/shiori/shiori"]
 CMD ["serve"]
