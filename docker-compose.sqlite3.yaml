@@ -1,0 +1,18 @@
+---
+version: "2.1"
+services:
+  shiori:
+    image: newargus/shiori:latest
+    container_name: shiori
+    environment:
+      - TZ=America/Los_Angeles
+      - PUID=1000
+      - PGID=1000
+      - SHIORI_DIR=/data
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+    volumes:
+      - data:/data
+volumes:
+  data:
